@@ -9,27 +9,29 @@ import sys
 
 
 class SIPRegisterHandler(socketserver.DatagramRequestHandler):
-    """
-    Echo server class
-    """
+
+    dicc_registro = {}
 
     def handle(self):
         """
         handle method of the server class
         (all requests will be handled by this method)
         """
-        cabecera = self.rfile.readline().decode('utf-8')
-        if cabecera.split()[0] == "REGISTER":
+        cabecera = self.rfile.readline().decode('utf-8').split(" ")
+        if cabecera[0] == "REGISTER":
                 print("me llega un register")
                 self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
+                self.dicc_registro[cabecera[1]] = self.client_address
         print("Desde la direccion", self.client_address)
+        print(self.dicc_registro)
+
 
 if __name__ == "__main__":
-    
+
     PORT = int(sys.argv[1])
-    # Listens at localhost ('') port 6001 
+    # Listens at localhost ('')
     # and calls the EchoHandler class to manage the request
-    serv = socketserver.UDPServer(('', PORT), SIPRegisterHandler) 
+    serv = socketserver.UDPServer(('', PORT), SIPRegisterHandler)
 
     print("Lanzando servidor UDP de eco...")
     try:
