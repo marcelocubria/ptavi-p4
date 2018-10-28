@@ -12,11 +12,13 @@ SERVER = sys.argv[1]
 PORT = int(sys.argv[2])
 PETICION = sys.argv[3]
 ADDRESS = sys.argv[4]
+EXPIRES = sys.argv[5]
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
     my_socket.connect((SERVER, PORT))
-    linea_registro = "REGISTER " + ADDRESS + " SIP/2.0\r\n\r\n"
+    linea_registro = "REGISTER " + ADDRESS + " SIP/2.0\r\n"
+    linea_registro += "Expires: " + EXPIRES + "\r\n\r\n"
     print("Enviando: REGISTER")
     my_socket.send(bytes(linea_registro, 'utf-8'))
     data = my_socket.recv(1024)

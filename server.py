@@ -17,13 +17,18 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         handle method of the server class
         (all requests will be handled by this method)
         """
-        cabecera = self.rfile.readline().decode('utf-8').split(" ")
-        if cabecera[0] == "REGISTER":
+        for line in self.rfile:
+            linea_decod = line.decode('utf-8').split(" ")
+            if linea_decod[0] == "REGISTER":
                 print("me llega un register")
+                usuario = linea_decod[1]
                 self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
-                self.dicc_registro[cabecera[1]] = self.client_address
+                self.dicc_registro[linea_decod[1]] = self.client_address
+            elif linea_decod[0] == "Expires:":
+                if int(linea_decod[1]) == 0:
+                    del self.dicc_registro[usuario]
+                    print("he borrado a " + usuario)
         print("Desde la direccion", self.client_address)
-        print(self.dicc_registro)
 
 
 if __name__ == "__main__":
