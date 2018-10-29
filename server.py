@@ -15,6 +15,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
     dicc_registro = {}
 
     def handle(self):
+        self.elimina_expires()
         info_usuario = {}
         for line in self.rfile:
             linea_decod = line.decode('utf-8').split(" ")
@@ -30,13 +31,12 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 self.dicc_registro[usuario]["expires"] = tiempo_fin
                 if expires == 0:
                     del self.dicc_registro[usuario]
-        self.elimina_expires()
         self.register2json()
         # print("Llega mensaje desde la direccion", self.client_address)
         print(self.dicc_registro)
 
     def register2json(self):
-        with open("diccionario.json", 'w') as file:
+        with open("registered.json", 'w') as file:
             json.dump(self.dicc_registro, file)
 
     # Se ejecuta cada vez que llega un mensaje al servidor
