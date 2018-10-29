@@ -15,6 +15,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
     dicc_registro = {}
 
     def handle(self):
+        self.json2registered()
         self.elimina_expires()
         info_usuario = {}
         for line in self.rfile:
@@ -39,6 +40,14 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         with open("registered.json", 'w') as file:
             json.dump(self.dicc_registro, file)
 
+    def json2registered(self):
+        try:
+            with open("registered.json") as f:
+                datos_json = json.load(f)
+                self.dicc_registro = datos_json
+        except:
+            pass
+
     # Se ejecuta cada vez que llega un mensaje al servidor
     def elimina_expires(self):
         hora_actual = time.strftime('%Y-%m-%d %H:%M:%S',
@@ -51,7 +60,6 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
 if __name__ == "__main__":
 
     PORT = int(sys.argv[1])
-
     serv = socketserver.UDPServer(('', PORT), SIPRegisterHandler)
 
     print("Lanzando servidor UDP de eco...")
