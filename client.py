@@ -16,6 +16,10 @@ EXPIRES = sys.argv[5]
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
+    """
+    envia un paquete de registro con la direccion ADDRESS
+    a SERVER en el puerto PORT, con un valor de EXPIRES
+    """
     my_socket.connect((SERVER, PORT))
     linea_registro = "REGISTER " + ADDRESS + " SIP/2.0\r\n"
     linea_registro += "Expires: " + EXPIRES + "\r\n\r\n"
