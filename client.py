@@ -21,9 +21,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
     a SERVER en el puerto PORT, con un valor de EXPIRES
     """
     my_socket.connect((SERVER, PORT))
-    linea_registro = "REGISTER " + ADDRESS + " SIP/2.0\r\n"
+    linea_registro = "REGISTER sip:" + ADDRESS + " SIP/2.0\r\n"
     linea_registro += "Expires: " + EXPIRES + "\r\n\r\n"
-    print("Enviando: REGISTER")
+    print(linea_registro)
     my_socket.send(bytes(linea_registro, 'utf-8'))
     data = my_socket.recv(1024)
     print('Recibido -- ', data.decode('utf-8'))
