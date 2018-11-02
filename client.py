@@ -7,12 +7,14 @@ Programa cliente UDP que abre un socket a un servidor
 import socket
 import sys
 
-# Constantes. Dirección IP del servidor y contenido a enviar
-SERVER = sys.argv[1]
-PORT = int(sys.argv[2])
-PETICION = sys.argv[3]
-ADDRESS = sys.argv[4]
-EXPIRES = sys.argv[5]
+try:
+    SERVER = sys.argv[1]
+    PORT = int(sys.argv[2])
+    PETICION = sys.argv[3]
+    ADDRESS = sys.argv[4]
+    EXPIRES = sys.argv[5]
+except IndexError:
+    print("Usage: client.py ip puerto register sip_address expires_value")
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
